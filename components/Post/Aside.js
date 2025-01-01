@@ -27,7 +27,7 @@ const Aside = ({ pageTitle, blockMap, frontMatter }) => {
             {BLOG.showWeChatPay && (
               <button
                 onClick={() => setShowPay((showPay) => !showPay)}
-                className='text-gray-600 dark:text-day hover:text-gray-400 dark:hover:text-gray-400'
+                className='hidden text-gray-600 dark:text-day hover:text-gray-400 dark:hover:text-gray-400'
               >
                 <ThumbUpIcon className='w-5 h-5' />
               </button>
