@@ -2,7 +2,7 @@ const BLOG = {
   title: "Linyu's Light Years",
   author: 'Linyu',
   email: 'wellion77777@gmail.com',
-  link: 'https://notionic-ten-navy.vercel.app',
+  link: 'https://linyu.cool',
   newsletter: 'Notionic Weekly',
   description: 'Yesterday is a history, tomorrow is a mystery, only today is a gift',
   lang: 'en-US', // ['en-US', 'zh-CN', 'zh-HK', 'zh-TW', 'ja-JP', 'es-ES']
@@ -12,12 +12,12 @@ const BLOG = {
   lightBackground: '#F6F8FA', // use hex value, don't forget '#' e.g #fffefc
   darkBackground: '#212936', // use hex value, don't forget '#'
   path: '', // leave this empty unless you want to deploy Notionic in a folder
-  since: 2022, // If leave this empty, current year will be used.
+  since: 2024, // If leave this empty, current year will be used.
   postsPerPage: 10,
   sortByDate: true,
   pagesShow: {
     newsletter: true,
-    notes: true,
+    notes: false,
     projects: true,
     contact: true,
     books: true,
