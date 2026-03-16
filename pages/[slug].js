@@ -31,6 +31,8 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params: { slug } }) {
   const posts = await getAllPosts({ onlyNewsletter: false })
   const post = posts.find((t) => t.slug === slug)
+  const size = Buffer.byteLength(JSON.stringify({ post, blockMap }), 'utf8')
+  console.log('props size KB:', (size/1024).toFixed(1))
 
   try {
     const blockMap = await getPostBlocks(post.id)
