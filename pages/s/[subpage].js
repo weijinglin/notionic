@@ -4,6 +4,7 @@ import { getAllPosts, getPostBlocks } from '@/lib/notion'
 import { useRouter } from 'next/router'
 
 import { getAllPagesInSpace, getPageBreadcrumbs, idToUuid } from 'notion-utils'
+import normalizeRecordMap from '@/lib/notion/normalizeRecordMap'
 import { defaultMapPageUrl } from 'react-notion-x'
 
 import Loading from '@/components/Loading'
@@ -66,16 +67,20 @@ export async function getStaticProps({ params: { subpage } }) {
 
   let blockMap, post
   try {
-    blockMap = await getPostBlocks(subpage)
+    blockMap = normalizeRecordMap(await getPostBlocks(subpage))
     const id = idToUuid(subpage)
 
     const breadcrumbs = getPageBreadcrumbs(blockMap, id)
-    post = posts.find((t) => t.id === breadcrumbs[0].block.id)
+    const rootBreadcrumb = breadcrumbs?.[0]
+    post = rootBreadcrumb?.block?.id
+      ? posts.find((t) => t.id === rootBreadcrumb.block.id)
+      : null
+
     // When the page is not in the notion database, manually initialize the post
     if (!post) {
       post = {
         type: ['Page'],
-        title: breadcrumbs[0].title
+        title: rootBreadcrumb?.title || 'Untitled'
       }
     }
     // console.log("debug: ", breadcrumbs, post)
@@ -86,12 +91,14 @@ export async function getStaticProps({ params: { subpage } }) {
 
   // Allow only pages in your own space
   const NOTION_SPACES_ID = BLOG.notionSpacesId
+  if (!NOTION_SPACES_ID) return { props: { post, blockMap }, revalidate: 1 }
   const pageAllowed = (page) => {
     // When page block space_id = NOTION_SPACES_ID
     let allowed = false
     Object.values(page.block).forEach(block => {
-      if (!allowed && block.value && block.value.space_id) {
-        allowed = NOTION_SPACES_ID.includes(block.value.space_id)
+      const blockValue = block?.value?.value || block?.value
+      if (!allowed && blockValue?.space_id) {
+        allowed = NOTION_SPACES_ID.includes(blockValue.space_id)
       }
     })
     return allowed
