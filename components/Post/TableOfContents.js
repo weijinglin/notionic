@@ -53,30 +53,41 @@ export default function TableOfContents ({ blockMap, frontMatter, pageTitle }) {
   useEffect(() => {
     if (!nodes.length) return
 
-    const updateActiveHeading = () => {
-      let nextActiveId = nodes[0].id
+    const headingElements = nodes
+      .map((node) => ({ id: node.id, element: document.querySelector(toBlockClass(node.id)) }))
+      .filter((item) => item.element)
 
-      for (const node of nodes) {
-        const target = document.querySelector(toBlockClass(node.id))
-        if (!target) continue
-        const rect = target.getBoundingClientRect()
-        if (rect.top <= 110) {
-          nextActiveId = node.id
-        } else {
-          break
-        }
-      }
-
-      setActiveId((prev) => (prev === nextActiveId ? prev : nextActiveId))
+    if (!headingElements.length) {
+      setActiveId('')
+      return
     }
 
-    updateActiveHeading()
-    window.addEventListener('scroll', updateActiveHeading, { passive: true })
-    window.addEventListener('resize', updateActiveHeading)
+    const observer = new window.IntersectionObserver(
+      (entries) => {
+        let latestVisible = null
+
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue
+          latestVisible = entry.target
+        }
+
+        if (!latestVisible) return
+
+        const hit = headingElements.find((item) => item.element === latestVisible)
+        if (hit) {
+          setActiveId((prev) => (prev === hit.id ? prev : hit.id))
+        }
+      },
+      {
+        rootMargin: '-80px 0px -70% 0px',
+        threshold: [0, 1]
+      }
+    )
+
+    headingElements.forEach((item) => observer.observe(item.element))
 
     return () => {
-      window.removeEventListener('scroll', updateActiveHeading)
-      window.removeEventListener('resize', updateActiveHeading)
+      observer.disconnect()
     }
   }, [nodes])
 
