@@ -18,30 +18,35 @@ export default function Content (props) {
           passHref
           href={`${BLOG.path}/${frontMatter.slug}`}
           scroll={false}
-          className='block md:-ml-6 mb-2 text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300'
+          className='reveal-fade inline-flex items-center gap-1 md:-ml-6 mb-4 px-2 py-1 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800/70 transition-colors'
         >
-          <ChevronLeftIcon className='inline-block mb-1 h-5 w-5' />
-          <span className='m-1'>{frontMatter.title}</span>
+          <ChevronLeftIcon className='h-5 w-5' />
+          <span>{frontMatter.title}</span>
         </Link>
       )}
-      <h1 className='font-bold text-3xl text-black dark:text-white'>
-        {pageTitle ? pageTitle : frontMatter.title}
-      </h1>
-      {frontMatter.type[0] !== 'Page' && (
-        <nav className='flex mt-5 mb-10 items-start text-gray-500 dark:text-gray-400'>
-          <div className='mr-2 mb-4 md:ml-0'>
-            <FormattedDate date={frontMatter.date} />
-          </div>
-          {frontMatter.tags && (
-            <div className='flex flex-nowrap max-w-full overflow-x-auto article-tags'>
-              {frontMatter.tags.map((tag) => (
-                <TagItem key={tag} tag={tag} />
-              ))}
+
+      <header className='reveal-up mb-9'>
+        <h1 className='font-bold text-3xl md:text-4xl leading-tight tracking-tight text-slate-900 dark:text-white'>
+          {pageTitle ? pageTitle : frontMatter.title}
+        </h1>
+
+        {frontMatter.type[0] !== 'Page' && (
+          <nav className='mt-5 flex flex-wrap items-center gap-x-3 gap-y-3 text-slate-500 dark:text-slate-400'>
+            <div className='inline-flex items-center rounded-full border border-slate-200 bg-white/75 px-3 py-1 text-sm shadow-sm dark:border-slate-700 dark:bg-slate-800/70'>
+              <FormattedDate date={frontMatter.date} />
             </div>
-          )}
-        </nav>
-      )}
-      <div className="-mt-4 relative">
+            {frontMatter.tags && (
+              <div className='flex flex-nowrap max-w-full overflow-x-auto article-tags'>
+                {frontMatter.tags.map((tag) => (
+                  <TagItem key={tag} tag={tag} />
+                ))}
+              </div>
+            )}
+          </nav>
+        )}
+      </header>
+
+      <div className='-mt-1 relative reveal-up reveal-delay-1'>
         <NotionRenderer
           blockMap={blockMap}
           previewImages={BLOG.previewImagesEnabled}
