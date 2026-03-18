@@ -22,49 +22,59 @@ const SearchLayout = ({ tags, posts, currentTag }) => {
 
   return (
     <Container>
-      <div className='relative'>
-        <input
-          type='text'
-          placeholder={
-            currentTag
-              ? `${t.SEARCH.ONLY_SEARCH} #${currentTag}`
-              : `${t.SEARCH.PLACEHOLDER}`
-          }
-          className='w-full bg-white dark:bg-gray-600 shadow-md rounded-lg outline-none focus:shadow p-3'
-          onChange={(e) => setSearchValue(e.target.value)}
-        />
-        <svg
-          className='absolute right-3 top-3 h-5 w-5 text-gray-400'
-          xmlns='http://www.w3.org/2000/svg'
-          fill='none'
-          viewBox='0 0 24 24'
-          stroke='currentColor'
-        >
-          <path
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            strokeWidth='2'
-            d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
-          ></path>
-        </svg>
-      </div>
-      <Tags tags={tags} currentTag={currentTag} />
-      <div className='article-container my-8'>
+      <section className='reveal-up mb-3'>
+        <div className='rounded-2xl border border-slate-200/80 bg-white/85 dark:bg-slate-800/75 dark:border-slate-700/80 px-4 py-4 shadow-sm backdrop-blur-sm'>
+          <div className='relative'>
+            <input
+              type='text'
+              placeholder={
+                currentTag
+                  ? `${t.SEARCH.ONLY_SEARCH} #${currentTag}`
+                  : `${t.SEARCH.PLACEHOLDER}`
+              }
+              className='w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white/90 dark:bg-slate-900/70 outline-none focus:shadow-md focus:border-slate-400 dark:focus:border-slate-500 px-3 py-3 transition'
+              onChange={(e) => setSearchValue(e.target.value)}
+            />
+            <svg
+              className='absolute right-3 top-3 h-5 w-5 text-slate-400'
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
+              stroke='currentColor'
+            >
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth='2'
+                d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
+              ></path>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <section className='reveal-fade reveal-delay-1'>
+        <Tags tags={tags} currentTag={currentTag} />
+      </section>
+
+      <section className='article-container my-8 reveal-up reveal-delay-2'>
         {!filteredBlogPosts.length && (
-          <p className='text-gray-500 dark:text-gray-300'>
+          <div className='rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/65 px-4 py-5 text-slate-500 dark:text-slate-300'>
             {t.SEARCH.NOT_FOUND}
-          </p>
+          </div>
         )}
         {filteredBlogPosts.slice(0, 20).map((post) => (
           <BlogPost key={post.id} post={post} />
         ))}
-      </div>
+      </section>
     </Container>
   )
 }
+
 SearchLayout.propTypes = {
   posts: PropTypes.array.isRequired,
   tags: PropTypes.object.isRequired,
   currentTag: PropTypes.string
 }
+
 export default SearchLayout

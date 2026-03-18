@@ -2,6 +2,7 @@ import Link from 'next/link'
 
 const Tags = ({ tags, currentTag }) => {
   if (!tags) return null
+
   return (
     <div className='tag-container'>
       <div className='flex flex-wrap justify-center mt-4'>
@@ -10,13 +11,15 @@ const Tags = ({ tags, currentTag }) => {
           return (
             <div
               key={key}
-              className={`m-1 font-medium rounded-lg whitespace-nowrap hover:text-gray-100 dark:text-gray-300 hover:bg-gray-400 dark:hover:bg-gray-600 ${
+              className={`m-1 font-medium rounded-full whitespace-nowrap transition-colors border ${
                 selected
-                  ? 'text-gray-100 bg-gray-400 dark:bg-gray-600'
-                  : 'text-gray-400 bg-gray-100 dark:bg-night'
+                  ? 'text-white border-cyan-500 bg-gradient-to-r from-cyan-500 to-sky-500 shadow'
+                  : 'text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/75 hover:border-cyan-300 dark:hover:border-cyan-700 hover:text-cyan-700 dark:hover:text-cyan-300'
               }`}
             >
-              <Link key={key} scroll={false}
+              <Link
+                key={key}
+                scroll={false}
                 href={selected ? '/search' : `/tag/${encodeURIComponent(key)}`}
                 className='px-4 py-2 block'
               >
