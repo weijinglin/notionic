@@ -34,21 +34,25 @@ const Hero = ({ blockMap }) => {
 
   return (
     <>
-      <div className='container mx-auto flex px-5 py-2 mb-10 md:flex-row flex-col items-center'>
-        <div className='flex flex-col md:w-3/5 md:items-start mb-6 md:mb-0 text-left'>
-          <NotionRenderer
-            className='md:ml-0'
-            blockMap={blockMap}
-            frontMatter={{}}
-            subPageTitle={null}
-          />
-          <Social />
-          <div className='flex flex-col sm:flex-row sm:justify-center gap-4 mt-6'>
+      <div className='container mx-auto flex px-5 py-2 mb-12 md:flex-row flex-col items-center gap-8'>
+        <div className='reveal-up flex flex-col md:w-3/5 md:items-start mb-6 md:mb-0 text-left'>
+          <div className='rounded-2xl border border-slate-200/70 bg-white/70 px-5 py-3 shadow-sm backdrop-blur-sm dark:border-slate-700/70 dark:bg-slate-900/50'>
+            <NotionRenderer
+              className='md:ml-0'
+              blockMap={blockMap}
+              frontMatter={{}}
+              subPageTitle={null}
+            />
+          </div>
+          <div className='reveal-fade reveal-delay-1 mt-5'>
+            <Social />
+          </div>
+          <div className='reveal-up reveal-delay-2 flex flex-col sm:flex-row sm:justify-center gap-4 mt-7'>
             <Link passHref href='/contact' scroll={false}>
-              <button className='w-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 inline-flex py-3 px-5 rounded-lg items-center'>
-                <MailIcon className='inline-block text-gray-600 dark:text-day h-7 w-7 mt-1' />
+              <button className='w-full card-lift border border-slate-200/80 bg-white/80 dark:bg-slate-800/80 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 inline-flex py-3 px-5 rounded-xl items-center shadow-sm'>
+                <MailIcon className='inline-block text-slate-600 dark:text-day h-7 w-7 mt-1' />
                 <span className='ml-4 flex items-start flex-col leading-none'>
-                  <span className='text-xs text-gray-600 dark:text-day mb-1'>
+                  <span className='text-xs text-slate-500 dark:text-slate-300 mb-1'>
                     {t.HERO.HOME.CONTACT_BUTTON_DES}
                   </span>
                   <span className='font-medium'>{t.HERO.HOME.CONTACT_BUTTON}</span>
@@ -58,14 +62,14 @@ const Hero = ({ blockMap }) => {
             {showCopied ? (
               <button
                 disabled
-                className='bg-gray-200 dark:bg-gray-600 inline-flex py-3 px-5 rounded-lg items-center'
+                className='border border-emerald-300/70 bg-emerald-50/90 dark:bg-emerald-900/30 dark:border-emerald-700 inline-flex py-3 px-5 rounded-xl items-center shadow-sm'
               >
-                <ClipboardCheckIcon className='inline-block text-gray-600 dark:text-day h-7 w-7' />
+                <ClipboardCheckIcon className='inline-block text-emerald-700 dark:text-emerald-300 h-7 w-7' />
                 <span className='ml-4 flex items-start flex-col leading-none'>
-                  <span className='text-xs text-gray-600 dark:text-day mb-1'>
+                  <span className='text-xs text-emerald-700 dark:text-emerald-300 mb-1'>
                     {t.HERO.RSS_BUTTON_DES_COPIED}
                   </span>
-                  <span className='font-medium'>
+                  <span className='font-medium text-emerald-800 dark:text-emerald-200'>
                     {t.HERO.RSS_BUTTON_COPIED}
                   </span>
                 </span>
@@ -73,11 +77,11 @@ const Hero = ({ blockMap }) => {
             ) : (
               <button
                 onClick={() => clickCopy()}
-                className='bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 inline-flex py-3 px-5 rounded-lg items-center'
+                className='card-lift border border-slate-200/80 bg-white/80 dark:bg-slate-800/80 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 inline-flex py-3 px-5 rounded-xl items-center shadow-sm'
               >
-                <RssIcon className='inline-block text-gray-600 dark:text-day h-7 w-7' />
+                <RssIcon className='inline-block text-slate-600 dark:text-day h-7 w-7' />
                 <span className='ml-4 flex items-start flex-col leading-none'>
-                  <span className='text-xs text-gray-600 dark:text-day mb-1'>
+                  <span className='text-xs text-slate-500 dark:text-slate-300 mb-1'>
                     {t.HERO.RSS_BUTTON_DES}
                   </span>
                   <span className='font-medium'>{t.HERO.HOME.RSS_BUTTON}</span>
@@ -86,7 +90,7 @@ const Hero = ({ blockMap }) => {
             )}
           </div>
         </div>
-        <div className='w-2/5'>
+        <div className='reveal-up reveal-delay-3 w-2/5 float-soft'>
           <Avatar className='text-gray-600 dark:text-gray-300' />
         </div>
       </div>

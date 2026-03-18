@@ -94,15 +94,15 @@ const CommentNode = ({ node, locale, text, onReply, depth = 0 }) => {
   const isReply = depth > 0
 
   return (
-    <article className={`${isReply ? 'mt-4 ml-5 md:ml-8' : 'mt-4'} relative`}>
+    <article className={`${isReply ? 'mt-4 ml-5 md:ml-8' : 'mt-4'} relative reveal-fade`}>
       {isReply && (
-        <span className='absolute -left-4 top-5 h-[1px] w-3 bg-gray-300 dark:bg-gray-600' />
+        <span className='absolute -left-4 top-5 h-[1px] w-3 bg-slate-300 dark:bg-slate-600' />
       )}
 
-      <div className='rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-800/80'>
+      <div className='rounded-2xl border border-slate-200/80 bg-white/90 px-4 py-3 shadow-sm transition-all duration-300 dark:border-slate-700/80 dark:bg-slate-800/80 hover:shadow-md'>
         <div className='flex flex-wrap items-center justify-between gap-2'>
           <div className='min-w-0'>
-            <p className='truncate text-sm font-semibold text-gray-900 dark:text-gray-100'>
+            <p className='truncate text-sm font-semibold text-slate-900 dark:text-slate-100'>
               {node.nickname}
             </p>
             {node.website && (
@@ -110,26 +110,26 @@ const CommentNode = ({ node, locale, text, onReply, depth = 0 }) => {
                 href={node.website}
                 target='_blank'
                 rel='noreferrer'
-                className='mt-0.5 block truncate text-xs text-sky-600 hover:text-sky-700 hover:underline dark:text-sky-400 dark:hover:text-sky-300'
+                className='mt-0.5 block truncate text-xs text-cyan-600 hover:text-cyan-700 hover:underline dark:text-cyan-400 dark:hover:text-cyan-300'
               >
                 {node.website}
               </a>
             )}
           </div>
 
-          <time className='text-xs text-gray-500 dark:text-gray-400'>
+          <time className='text-xs text-slate-500 dark:text-slate-400'>
             {formatTime(node.created_at, locale)}
           </time>
         </div>
 
-        <p className='mt-3 whitespace-pre-wrap break-words text-sm leading-7 text-gray-700 dark:text-gray-200'>
+        <p className='mt-3 whitespace-pre-wrap break-words text-sm leading-7 text-slate-700 dark:text-slate-200'>
           {node.content}
         </p>
 
         <div className='mt-3 flex items-center'>
           <button
             type='button'
-            className='rounded-full border border-gray-300 px-3 py-1 text-xs font-medium text-gray-600 transition-colors hover:border-gray-400 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:border-gray-500 dark:hover:bg-gray-700/50'
+            className='rounded-full border border-slate-300 px-3 py-1 text-xs font-medium text-slate-600 transition-colors hover:border-slate-400 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:border-slate-500 dark:hover:bg-slate-700/50'
             onClick={() => onReply(node)}
           >
             {text.reply}
@@ -138,7 +138,7 @@ const CommentNode = ({ node, locale, text, onReply, depth = 0 }) => {
       </div>
 
       {node.replies.length > 0 && (
-        <div className='ml-1 border-l border-dashed border-gray-300 pl-3 dark:border-gray-600'>
+        <div className='ml-1 border-l border-dashed border-slate-300 pl-3 dark:border-slate-600'>
           {node.replies.map((reply) => (
             <CommentNode
               key={reply.id}
@@ -287,12 +287,12 @@ const SupaComments = ({ frontMatter }) => {
   const commentTree = useMemo(() => buildTree(rows), [rows])
 
   return (
-    <section id='comments' className='mt-14'>
-      <h3 className='text-xl font-semibold tracking-tight text-gray-900 dark:text-gray-100'>{text.title}</h3>
+    <section id='comments' className='mt-16 reveal-up'>
+      <h3 className='text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100'>{text.title}</h3>
 
-      <form onSubmit={onSubmit} className='mt-4 space-y-3 rounded-2xl border border-gray-200 bg-gray-50/70 p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800/60'>
+      <form onSubmit={onSubmit} className='mt-4 space-y-3 rounded-2xl border border-slate-200/80 bg-white/75 p-4 shadow-sm backdrop-blur-sm dark:border-slate-700/80 dark:bg-slate-800/60'>
         {replyTo && (
-          <div className='flex items-center justify-between rounded-lg bg-sky-50 px-3 py-2 text-sm text-sky-900 dark:bg-sky-900/30 dark:text-sky-100'>
+          <div className='flex items-center justify-between rounded-lg bg-cyan-50 px-3 py-2 text-sm text-cyan-900 dark:bg-cyan-900/30 dark:text-cyan-100'>
             <span>
               {text.replyingTo}: <span className='font-semibold'>{replyTo.nickname}</span>
             </span>
@@ -311,19 +311,19 @@ const SupaComments = ({ frontMatter }) => {
             value={form.nickname}
             onChange={(e) => onInputChange('nickname', e.target.value)}
             placeholder={text.nickname}
-            className='rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-900 dark:focus:border-gray-400 dark:focus:ring-gray-700'
+            className='rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-900 dark:focus:border-slate-400 dark:focus:ring-slate-700'
           />
           <input
             value={form.email}
             onChange={(e) => onInputChange('email', e.target.value)}
             placeholder={text.email}
-            className='rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-900 dark:focus:border-gray-400 dark:focus:ring-gray-700'
+            className='rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-900 dark:focus:border-slate-400 dark:focus:ring-slate-700'
           />
           <input
             value={form.website}
             onChange={(e) => onInputChange('website', e.target.value)}
             placeholder={text.website}
-            className='rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-900 dark:focus:border-gray-400 dark:focus:ring-gray-700'
+            className='rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-900 dark:focus:border-slate-400 dark:focus:ring-slate-700'
           />
         </div>
 
@@ -332,7 +332,7 @@ const SupaComments = ({ frontMatter }) => {
           onChange={(e) => onInputChange('content', e.target.value)}
           placeholder={text.content}
           rows={4}
-          className='w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm leading-6 shadow-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-900 dark:focus:border-gray-400 dark:focus:ring-gray-700'
+          className='w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm leading-6 shadow-sm outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200 dark:border-slate-600 dark:bg-slate-900 dark:focus:border-slate-400 dark:focus:ring-slate-700'
         />
 
         {error && <p className='text-sm text-red-600 dark:text-red-400'>{error}</p>}
@@ -341,16 +341,16 @@ const SupaComments = ({ frontMatter }) => {
         <button
           type='submit'
           disabled={submitting}
-          className='rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-700 disabled:opacity-60 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-300'
+          className='rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700 disabled:opacity-60 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300'
         >
           {submitting ? text.submitting : text.submit}
         </button>
       </form>
 
       <div className='mt-6'>
-        {loading && <p className='text-sm text-gray-500 dark:text-gray-400'>{activeLocale === 'zh' ? '加载中...' : 'Loading...'}</p>}
+        {loading && <p className='text-sm text-slate-500 dark:text-slate-400'>{activeLocale === 'zh' ? '加载中...' : 'Loading...'}</p>}
         {!loading && commentTree.length === 0 && (
-          <p className='text-sm text-gray-500 dark:text-gray-400'>{text.empty}</p>
+          <p className='text-sm text-slate-500 dark:text-slate-400'>{text.empty}</p>
         )}
         {commentTree.map((comment) => (
           <CommentNode
