@@ -19,7 +19,7 @@ import { motion } from 'framer-motion'
 
 const NavBar = () => {
   const router = useRouter()
-  const { locale } = useRouter()
+  const { locale } = router
   const t = lang[locale]
   const [showMenu, setShowMenu] = useState(false)
 
@@ -67,9 +67,19 @@ const NavBar = () => {
       show: true
     }
   ]
+
+  useEffect(() => {
+    const closeMenu = () => setShowMenu(false)
+    router.events.on('routeChangeComplete', closeMenu)
+    router.events.on('routeChangeError', closeMenu)
+    return () => {
+      router.events.off('routeChangeComplete', closeMenu)
+      router.events.off('routeChangeError', closeMenu)
+    }
+  }, [router.events])
+
   return (
-    <motion.div className='flex'>
-      {/* Desktop Menu */}
+    <motion.div className='flex items-center'>
       <ul className='hidden md:flex md:gap-1'>
         {links.map(
           (link) =>
@@ -77,8 +87,10 @@ const NavBar = () => {
               <Link passHref href={link.to} key={link.id} scroll={false}>
                 <li
                   className={`${
-                    activeMenu === link.to ? 'bg-gray-200 dark:bg-gray-700' : ''
-                  } hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer rounded-lg block py-1 px-2 nav`}
+                    activeMenu === link.to
+                      ? 'bg-slate-200/80 text-slate-900 dark:bg-slate-700/80 dark:text-slate-100'
+                      : 'text-slate-600 dark:text-slate-300'
+                  } hover:bg-slate-200/80 dark:hover:bg-slate-700/80 cursor-pointer rounded-xl block py-1 px-2 nav transition-colors`}
                 >
                   <div className='font-light'>
                     {link.icon}
@@ -86,7 +98,6 @@ const NavBar = () => {
                   </div>
                 </li>
               </Link>
-
             )
         )}
       </ul>
@@ -96,25 +107,25 @@ const NavBar = () => {
         <LangSwitcher />
       </div>
 
-      {/* Mobile Phone Menu */}
       <div className='md:hidden mr-2 block '>
         <button
-          type='button' aria-label='Menu'
-          onClick={() => setShowMenu((showMenu) => !showMenu)}
-          className='hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer rounded-lg block p-2 -mr-3 md:pb-3'
+          type='button'
+          aria-label='Menu'
+          onClick={() => setShowMenu((prev) => !prev)}
+          className='hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer rounded-lg block p-2 -mr-3 md:pb-3 transition-colors'
         >
           <MenuIcon className='inline-block mb-1 h-5 w-5' />
         </button>
         {showMenu && (
-          <div className='absolute right-0 w-40 mr-4 mt-2 bg-white dark:bg-gray-700 divide-y divide-gray-200 dark:divide-gray-600 rounded-md shadow-lg outline-none'>
+          <div className='absolute right-0 w-44 mr-4 mt-2 bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl divide-y divide-slate-200 dark:divide-slate-700 rounded-xl shadow-xl outline-none border border-slate-200 dark:border-slate-700'>
             <div className='py-1'>
               {links.map(
                 (link) =>
                   link.show && (
                     <Link passHref key={link.id} href={link.to} scroll={false}>
                       <button
-                        onClick={() => setShowMenu((showMenu) => !showMenu)}
-                        className='text-left hover:bg-gray-100 dark:hover:bg-gray-600 font-light block justify-between w-full px-4 py-2 leading-5'
+                        onClick={() => setShowMenu(false)}
+                        className='text-left hover:bg-slate-100 dark:hover:bg-slate-700 font-light block justify-between w-full px-4 py-2 leading-5 transition-colors'
                       >
                         {link.icon}
                         <span className='m-1'>{link.name}</span>
@@ -138,9 +149,10 @@ const Header = ({ navBarTitle, fullWidth }) => {
   const useSticky = !BLOG.autoCollapsedNavBar
   const navRef = useRef(/** @type {HTMLDivElement} */ undefined)
   const sentinelRef = useRef(/** @type {HTMLDivElement} */ undefined)
+
   const handler = useCallback(([entry]) => {
     if (useSticky && navRef.current) {
-      navRef.current?.classList.toggle('sticky-nav-full', !entry.isIntersecting)
+      navRef.current.classList.toggle('sticky-nav-full', !entry.isIntersecting)
     } else {
       navRef.current?.classList.add('remove-sticky')
     }
@@ -148,20 +160,25 @@ const Header = ({ navBarTitle, fullWidth }) => {
 
   useEffect(() => {
     const sentinelEl = sentinelRef.current
+    if (!sentinelEl) return
+
     const observer = new window.IntersectionObserver(handler)
     observer.observe(sentinelEl)
 
-    window.addEventListener('scroll', () => {
-      if (window.pageYOffset > 400) {
-        setShowTitle(true)
-      } else {
-        setShowTitle(false)
-      }
-    })
-    return () => {
-      sentinelEl && observer.unobserve(sentinelEl)
+    const onScroll = () => {
+      setShowTitle(window.pageYOffset > 400)
     }
-  }, [handler, sentinelRef])
+
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+
+    return () => {
+      observer.unobserve(sentinelEl)
+      observer.disconnect()
+      window.removeEventListener('scroll', onScroll)
+    }
+  }, [handler])
+
   return (
     <>
       <div className='observer-element h-4 md:h-12' ref={sentinelRef}></div>
@@ -172,15 +189,15 @@ const Header = ({ navBarTitle, fullWidth }) => {
         id='sticky-nav'
         ref={navRef}
       >
-        <div className='flex items-center'>
+        <div className='flex items-center min-w-0'>
           <Link passHref href='/' scroll={false} aria-label={BLOG.title}>
             <motion.div>
-              <Logo className='h-6 hover:text-blue-500 dark:hover:text-blue-500 fill-current' />
+              <Logo className='h-6 hover:text-blue-500 dark:hover:text-blue-400 fill-current transition-colors' />
             </motion.div>
           </Link>
           {navBarTitle ? (
             <p
-              className={`ml-2 font-medium ${
+              className={`ml-2 font-medium truncate ${
                 !showTitle ? 'hidden' : 'hidden xl:block'
               }`}
             >
@@ -188,7 +205,7 @@ const Header = ({ navBarTitle, fullWidth }) => {
             </p>
           ) : (
             <p
-              className={`ml-2 font-medium ${
+              className={`ml-2 font-medium truncate ${
                 !showTitle ? 'hidden' : 'hidden xl:block'
               }`}
             >

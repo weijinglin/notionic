@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { getPageTitle } from 'notion-utils'
 import { motion } from 'framer-motion'
 
@@ -8,15 +8,12 @@ import Aside from '@/components/Post/Aside'
 import Comments from '@/components/Post/Comments'
 import PostFooter from '@/components/Post/PostFooter'
 
-const Layout = ({ blockMap, frontMatter, fullWidth = false, subPage = false }) => {
-  const [showSubPageTitle, setShowSubPageTitle] = useState(false)
-
+const Layout = ({ blockMap, frontMatter, fullWidth = false }) => {
   const pageTitle = getPageTitle(blockMap)
-  useEffect(() => {
-    if (frontMatter.title !== pageTitle) {
-      setShowSubPageTitle(true)
-    }
-  }, [frontMatter, pageTitle, subPage])
+  const showSubPageTitle = useMemo(
+    () => frontMatter.title !== pageTitle,
+    [frontMatter.title, pageTitle]
+  )
 
   return (
     <Container

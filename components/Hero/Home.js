@@ -4,7 +4,7 @@ import Avatar from './Avatar.js'
 import Social from '../Common/Social.js'
 import { lang } from '@/lib/lang'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import {
   MailIcon,
   RssIcon,
@@ -14,14 +14,21 @@ import NotionRenderer from '@/components/Post/NotionRenderer'
 
 const Hero = ({ blockMap }) => {
   const [showCopied, setShowCopied] = useState(false)
+  const copyTimerRef = useRef(null)
   const { locale } = useRouter()
   const t = lang[locale]
 
   const clickCopy = async () => {
     setShowCopied(true)
     navigator.clipboard.writeText(BLOG.link + '/feed')
-    setTimeout(() => {
+
+    if (copyTimerRef.current) {
+      clearTimeout(copyTimerRef.current)
+    }
+
+    copyTimerRef.current = setTimeout(() => {
       setShowCopied(false)
+      copyTimerRef.current = null
     }, 1000)
   }
 

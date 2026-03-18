@@ -9,16 +9,20 @@ html {
   overflow-y: scroll;
   overflow-x: auto;
 }
+
 html::-webkit-scrollbar {
   width: 5px;
 }
+
 html {
   scrollbar-width: thin;
   scrollbar-color: var(--thumbBG) var(--scrollbarBG);
 }
+
 html::-webkit-scrollbar-track {
   background: var(--scrollbarBG);
 }
+
 html::-webkit-scrollbar-thumb {
   background-color: var(--thumbBG);
 }
@@ -27,13 +31,28 @@ html::-webkit-scrollbar-thumb {
   background: rgba(45, 170, 219, 0.3);
 }
 
+body {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.08), transparent 35%),
+    radial-gradient(circle at 90% 15%, rgba(14, 165, 233, 0.06), transparent 40%),
+    linear-gradient(180deg, rgba(248, 250, 252, 0.9), rgba(255, 255, 255, 1));
+}
+
+.dark body {
+  background:
+    radial-gradient(circle at 15% 10%, rgba(30, 64, 175, 0.2), transparent 35%),
+    radial-gradient(circle at 85% 20%, rgba(15, 23, 42, 0.35), transparent 45%),
+    linear-gradient(180deg, #111827, #0f172a);
+}
+
 .sticky-nav {
   position: sticky;
   z-index: 10;
   top: -1px;
-  backdrop-filter: blur(5px);
-  transition: all 0.5s cubic-bezier(0.4, 0, 0, 1);
-  border-bottom-color: transparent;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0, 1);
+  border-bottom: 1px solid transparent;
 }
 
 .remove-sticky {
@@ -42,6 +61,13 @@ html::-webkit-scrollbar-thumb {
 
 .sticky-nav-full {
   @apply border-none;
+  border-color: rgb(203 213 225 / 0.45);
+  background: linear-gradient(90deg, rgb(255 255 255 / 0.72), rgb(241 245 249 / 0.72));
+}
+
+.dark .sticky-nav-full {
+  border-color: rgb(51 65 85 / 0.45);
+  background: linear-gradient(90deg, rgb(15 23 42 / 0.72), rgb(30 41 59 / 0.72));
 }
 
 .sticky-nav-full .nav {
@@ -79,11 +105,13 @@ nav {
   .sticky-nav-full {
     @apply max-w-full border-none;
   }
+
   .header-name {
     display: block;
     opacity: 0;
     transition: all 0.5s cubic-bezier(0.4, 0, 0, 1);
   }
+
   .sticky-nav-full .header-name {
     opacity: 1;
     @apply dark:text-gray-300 text-gray-600;
@@ -98,9 +126,9 @@ nav {
 }
 
 .md-cover {
-  @apply bg-gradient-to-r from-gray-100 to-gray-100 group-hover:from-gray-200 group-hover:via-gray-200 dark:from-gray-700 dark:to-gray-700 dark:group-hover:from-gray-600 dark:group-hover:via-gray-600 group-hover:to-transparent;
+  @apply bg-gradient-to-r from-white/80 via-white/60 to-transparent dark:from-slate-900/80 dark:via-slate-900/55 dark:to-transparent;
 }
 
 .sm-cover {
-  @apply bg-gradient-to-r from-gray-100 via-gray-100 group-hover:from-gray-200 group-hover:via-gray-200 dark:from-gray-700 dark:via-gray-700 dark:group-hover:from-gray-600 dark:group-hover:via-gray-600 to-transparent;
+  @apply bg-gradient-to-r from-white/85 via-white/70 to-transparent dark:from-slate-900/85 dark:via-slate-900/65 dark:to-transparent;
 }
