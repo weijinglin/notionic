@@ -17,6 +17,14 @@ const Page = ({ postsToShow, page, showNext }) => {
 export async function getStaticProps(context) {
   const { page } = context.params // Get Current Page No.
   const posts = await getAllPosts({ onlyNewsletter: false })
+
+  if (!Array.isArray(posts)) {
+    console.warn('getStaticProps: getAllPosts did not return an array:', posts)
+    return {
+      notFound: true
+    }
+  }
+
   const postsToShow = posts.slice(
     BLOG.postsPerPage * (page - 1),
     BLOG.postsPerPage * page
@@ -35,6 +43,15 @@ export async function getStaticProps(context) {
 
 export async function getStaticPaths() {
   const posts = await getAllPosts({ onlyNewsletter: false })
+
+  if (!Array.isArray(posts)) {
+    console.warn('getStaticPaths: getAllPosts did not return an array:', posts)
+    return {
+      paths: [],
+      fallback: true
+    }
+  }
+
   const totalPosts = posts.length
   const totalPages = Math.ceil(totalPosts / BLOG.postsPerPage)
   return {
@@ -45,5 +62,6 @@ export async function getStaticPaths() {
     fallback: true
   }
 }
+
 
 export default Page

@@ -22,6 +22,15 @@ const Post = ({ post, blockMap }) => {
 
 export async function getStaticPaths() {
   const posts = await getAllPosts({ onlyNewsletter: false })
+
+  if (!Array.isArray(posts)) {
+    console.warn('getStaticPaths: getAllPosts did not return an array:', posts)
+    return {
+      paths: [],
+      fallback: true
+    }
+  }
+
   return {
     paths: posts.map((row) => `${BLOG.path}/${row.slug}`),
     fallback: true
@@ -30,12 +39,22 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params: { slug } }) {
   const posts = await getAllPosts({ onlyNewsletter: false })
-  const post = posts.find((t) => t.slug === slug)
-  const size = Buffer.byteLength(JSON.stringify({ post, blockMap }), 'utf8')
-  console.log('props size KB:', (size/1024).toFixed(1))
+  const post = Array.isArray(posts) ? posts.find((t) => t.slug === slug) : null
+
+  if (!post) {
+    return {
+      notFound: true
+    }
+  }
 
   try {
     const blockMap = await getPostBlocks(post.id)
+
+    if (process.env.NODE_ENV === 'development') {
+      const size = Buffer.byteLength(JSON.stringify({ post, blockMap }), 'utf8')
+      console.log('props size KB:', (size / 1024).toFixed(1))
+    }
+
     return {
       props: {
         post,
@@ -46,10 +65,7 @@ export async function getStaticProps({ params: { slug } }) {
   } catch (err) {
     console.error(err)
     return {
-      props: {
-        post: null,
-        blockMap: null
-      }
+      notFound: true
     }
   }
 }
