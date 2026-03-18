@@ -92,44 +92,66 @@ const normalizeWebsite = (value) => {
 
 const CommentNode = ({ node, locale, text, onReply, depth = 0 }) => {
   const isReply = depth > 0
-  return (
-    <div className={`${isReply ? 'ml-6 md:ml-10 mt-4' : 'mt-5'} border-l border-gray-200 dark:border-gray-700 pl-4`}>
-      <div className='flex flex-wrap items-center gap-2'>
-        <span className='font-medium text-gray-900 dark:text-gray-100'>{node.nickname}</span>
-        <span className='text-xs text-gray-500 dark:text-gray-400'>
-          {formatTime(node.created_at, locale)}
-        </span>
-      </div>
-      <p className='mt-2 whitespace-pre-wrap text-gray-700 dark:text-gray-300'>{node.content}</p>
-      {node.website && (
-        <a
-          href={node.website}
-          target='_blank'
-          rel='noreferrer'
-          className='inline-block mt-2 text-sm text-blue-600 dark:text-blue-400 hover:underline'
-        >
-          {node.website}
-        </a>
-      )}
-      <button
-        type='button'
-        className='mt-2 text-sm text-gray-600 dark:text-gray-300 hover:underline'
-        onClick={() => onReply(node)}
-      >
-        {text.reply}
-      </button>
 
-      {node.replies.map((reply) => (
-        <CommentNode
-          key={reply.id}
-          node={reply}
-          locale={locale}
-          text={text}
-          onReply={onReply}
-          depth={depth + 1}
-        />
-      ))}
-    </div>
+  return (
+    <article className={`${isReply ? 'mt-4 ml-5 md:ml-8' : 'mt-4'} relative`}>
+      {isReply && (
+        <span className='absolute -left-4 top-5 h-[1px] w-3 bg-gray-300 dark:bg-gray-600' />
+      )}
+
+      <div className='rounded-xl border border-gray-200 bg-white px-4 py-3 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-800/80'>
+        <div className='flex flex-wrap items-center justify-between gap-2'>
+          <div className='min-w-0'>
+            <p className='truncate text-sm font-semibold text-gray-900 dark:text-gray-100'>
+              {node.nickname}
+            </p>
+            {node.website && (
+              <a
+                href={node.website}
+                target='_blank'
+                rel='noreferrer'
+                className='mt-0.5 block truncate text-xs text-sky-600 hover:text-sky-700 hover:underline dark:text-sky-400 dark:hover:text-sky-300'
+              >
+                {node.website}
+              </a>
+            )}
+          </div>
+
+          <time className='text-xs text-gray-500 dark:text-gray-400'>
+            {formatTime(node.created_at, locale)}
+          </time>
+        </div>
+
+        <p className='mt-3 whitespace-pre-wrap break-words text-sm leading-7 text-gray-700 dark:text-gray-200'>
+          {node.content}
+        </p>
+
+        <div className='mt-3 flex items-center'>
+          <button
+            type='button'
+            className='rounded-full border border-gray-300 px-3 py-1 text-xs font-medium text-gray-600 transition-colors hover:border-gray-400 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:border-gray-500 dark:hover:bg-gray-700/50'
+            onClick={() => onReply(node)}
+          >
+            {text.reply}
+          </button>
+        </div>
+      </div>
+
+      {node.replies.length > 0 && (
+        <div className='ml-1 border-l border-dashed border-gray-300 pl-3 dark:border-gray-600'>
+          {node.replies.map((reply) => (
+            <CommentNode
+              key={reply.id}
+              node={reply}
+              locale={locale}
+              text={text}
+              onReply={onReply}
+              depth={depth + 1}
+            />
+          ))}
+        </div>
+      )}
+    </article>
   )
 }
 
@@ -265,16 +287,18 @@ const SupaComments = ({ frontMatter }) => {
   const commentTree = useMemo(() => buildTree(rows), [rows])
 
   return (
-    <section id='comments' className='mt-12'>
-      <h3 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>{text.title}</h3>
+    <section id='comments' className='mt-14'>
+      <h3 className='text-xl font-semibold tracking-tight text-gray-900 dark:text-gray-100'>{text.title}</h3>
 
-      <form onSubmit={onSubmit} className='mt-4 rounded-xl border border-gray-200 dark:border-gray-700 p-4 space-y-3'>
+      <form onSubmit={onSubmit} className='mt-4 space-y-3 rounded-2xl border border-gray-200 bg-gray-50/70 p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800/60'>
         {replyTo && (
-          <div className='text-sm text-gray-600 dark:text-gray-300'>
-            {text.replyingTo}: <span className='font-medium'>{replyTo.nickname}</span>
+          <div className='flex items-center justify-between rounded-lg bg-sky-50 px-3 py-2 text-sm text-sky-900 dark:bg-sky-900/30 dark:text-sky-100'>
+            <span>
+              {text.replyingTo}: <span className='font-semibold'>{replyTo.nickname}</span>
+            </span>
             <button
               type='button'
-              className='ml-3 hover:underline'
+              className='text-xs font-medium hover:underline'
               onClick={onCancelReply}
             >
               {text.cancelReply}
@@ -282,24 +306,24 @@ const SupaComments = ({ frontMatter }) => {
           </div>
         )}
 
-        <div className='grid grid-cols-1 md:grid-cols-3 gap-3'>
+        <div className='grid grid-cols-1 gap-3 md:grid-cols-3'>
           <input
             value={form.nickname}
             onChange={(e) => onInputChange('nickname', e.target.value)}
             placeholder={text.nickname}
-            className='rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm'
+            className='rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-900 dark:focus:border-gray-400 dark:focus:ring-gray-700'
           />
           <input
             value={form.email}
             onChange={(e) => onInputChange('email', e.target.value)}
             placeholder={text.email}
-            className='rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm'
+            className='rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-900 dark:focus:border-gray-400 dark:focus:ring-gray-700'
           />
           <input
             value={form.website}
             onChange={(e) => onInputChange('website', e.target.value)}
             placeholder={text.website}
-            className='rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm'
+            className='rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-900 dark:focus:border-gray-400 dark:focus:ring-gray-700'
           />
         </div>
 
@@ -308,16 +332,16 @@ const SupaComments = ({ frontMatter }) => {
           onChange={(e) => onInputChange('content', e.target.value)}
           placeholder={text.content}
           rows={4}
-          className='w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm'
+          className='w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm leading-6 shadow-sm outline-none transition focus:border-gray-500 focus:ring-2 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-900 dark:focus:border-gray-400 dark:focus:ring-gray-700'
         />
 
-        {error && <p className='text-sm text-red-600'>{error}</p>}
-        {success && <p className='text-sm text-green-600'>{success}</p>}
+        {error && <p className='text-sm text-red-600 dark:text-red-400'>{error}</p>}
+        {success && <p className='text-sm text-emerald-600 dark:text-emerald-400'>{success}</p>}
 
         <button
           type='submit'
           disabled={submitting}
-          className='rounded-md bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900 px-4 py-2 text-sm disabled:opacity-60'
+          className='rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-700 disabled:opacity-60 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-300'
         >
           {submitting ? text.submitting : text.submit}
         </button>
