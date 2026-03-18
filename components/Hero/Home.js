@@ -36,7 +36,8 @@ const Hero = ({ blockMap }) => {
     <>
       <div className='container mx-auto flex px-5 py-2 mb-12 md:flex-row flex-col items-center gap-8'>
         <div className='reveal-up flex flex-col md:w-3/5 md:items-start mb-6 md:mb-0 text-left'>
-          <div className='rounded-2xl border border-slate-200/70 bg-white/70 px-5 py-3 shadow-sm backdrop-blur-sm dark:border-slate-700/70 dark:bg-slate-900/50'>
+          <div className='home-intro-card relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white/82 px-6 py-5 shadow-xl shadow-slate-200/60 backdrop-blur-md dark:border-slate-700/70 dark:bg-slate-900/65 dark:shadow-slate-950/40'>
+            <div className='home-intro-glow pointer-events-none absolute -top-16 -right-8 h-44 w-44 rounded-full'></div>
             <NotionRenderer
               className='md:ml-0'
               blockMap={blockMap}

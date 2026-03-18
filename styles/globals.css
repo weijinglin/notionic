@@ -231,3 +231,53 @@ nav {
     transform: none !important;
   }
 }
+
+.home-intro-card {
+  isolation: isolate;
+}
+
+.home-intro-glow {
+  background: radial-gradient(circle at center, rgb(56 189 248 / 0.22) 0%, transparent 68%);
+}
+
+.home-intro-card .notion {
+  position: relative;
+  z-index: 1;
+  font-size: 1.08rem;
+  color: rgb(51 65 85);
+}
+
+.dark .home-intro-card .notion {
+  color: rgb(226 232 240);
+}
+
+.home-intro-card .notion-text {
+  margin: 0.8rem 0;
+  line-height: 1.85;
+}
+
+.home-intro-card .notion-h1,
+.home-intro-card .notion-h2,
+.home-intro-card .notion-h3 {
+  margin-top: 1.15rem;
+  margin-bottom: 0.7rem;
+  letter-spacing: -0.02em;
+}
+
+.home-intro-card .notion-h1 {
+  font-size: 1.85rem;
+}
+
+.home-intro-card .notion-h2 {
+  font-size: 1.45rem;
+}
+
+.home-intro-card .notion-quote {
+  border-left-color: rgb(14 165 233 / 0.45);
+  background: rgb(240 249 255 / 0.55);
+}
+
+.dark .home-intro-card .notion-quote {
+  border-left-color: rgb(56 189 248 / 0.48);
+  background: rgb(15 23 42 / 0.58);
+}
