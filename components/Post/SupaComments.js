@@ -177,12 +177,14 @@ const SupaComments = ({ frontMatter }) => {
       })
 
       if (!res.ok) {
-        throw new Error('failed to fetch comments')
+        const detail = await res.text()
+        throw new Error(`failed to fetch comments: ${res.status} ${detail}`)
       }
 
       const data = await res.json()
       setRows(Array.isArray(data) ? data : [])
-    } catch {
+    } catch (error) {
+      console.error(error)
       setError(text.loadError)
     } finally {
       setLoading(false)
@@ -244,14 +246,16 @@ const SupaComments = ({ frontMatter }) => {
       })
 
       if (!res.ok) {
-        throw new Error('failed to post comment')
+        const detail = await res.text()
+        throw new Error(`failed to post comment: ${res.status} ${detail}`)
       }
 
       setForm((prev) => ({ ...prev, content: '' }))
       setReplyTo(null)
       setSuccess(text.sendSuccess)
       await fetchComments()
-    } catch {
+    } catch (error) {
+      console.error(error)
       setError(text.sendError)
     } finally {
       setSubmitting(false)

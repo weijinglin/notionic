@@ -68,8 +68,8 @@ with check (
     or exists (
       select 1
       from public.comments p
-      where p.id = parent_id
-        and p.post_id = post_id
+      where p.id = comments.parent_id
+        and p.post_id = comments.post_id
     )
   )
 );
