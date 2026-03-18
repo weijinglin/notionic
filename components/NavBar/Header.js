@@ -15,7 +15,6 @@ import Social from '../Common/Social.js'
 import ThemeSwitcher from './ThemeSwitcher.js'
 import LangSwitcher from './LangSwitcher.js'
 import Logo from '@/components/Common/Logo'
-import { motion } from 'framer-motion'
 
 const NavBar = () => {
   const router = useRouter()
@@ -79,7 +78,7 @@ const NavBar = () => {
   }, [router.events])
 
   return (
-    <motion.div className='flex items-center'>
+    <div className='flex items-center'>
       <ul className='hidden md:flex md:gap-1'>
         {links.map(
           (link) =>
@@ -140,7 +139,7 @@ const NavBar = () => {
           </div>
         )}
       </div>
-    </motion.div>
+    </div>
   )
 }
 
@@ -191,9 +190,9 @@ const Header = ({ navBarTitle, fullWidth }) => {
       >
         <div className='flex items-center min-w-0'>
           <Link passHref href='/' scroll={false} aria-label={BLOG.title}>
-            <motion.div>
+            <div>
               <Logo className='h-6 hover:text-blue-500 dark:hover:text-blue-400 fill-current transition-colors' />
-            </motion.div>
+            </div>
           </Link>
           {navBarTitle ? (
             <p

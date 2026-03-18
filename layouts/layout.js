@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import { getPageTitle } from 'notion-utils'
-import { motion } from 'framer-motion'
 
 import Container from '@/components/Container'
 import Content from '@/components/Post/Content'
@@ -23,7 +22,7 @@ const Layout = ({ blockMap, frontMatter, fullWidth = false }) => {
       type='article'
       fullWidth={fullWidth}
     >
-      <motion.div className='flex flex-row'>
+      <div className='flex flex-row'>
         <Content
           frontMatter={frontMatter}
           blockMap={blockMap}
@@ -34,7 +33,7 @@ const Layout = ({ blockMap, frontMatter, fullWidth = false }) => {
           blockMap={blockMap}
           pageTitle={showSubPageTitle ? pageTitle : null}
         />
-      </motion.div>
+      </div>
       <PostFooter />
       <Comments frontMatter={frontMatter} />
     </Container>
